@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+@plugin "flyonui";
+@plugin "@iconify/tailwind4";
+@import "flyonui/variants.css";
+@source "../../node_modules/flyonui/dist/toggle-password.mjs";
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
