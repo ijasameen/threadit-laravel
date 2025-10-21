@@ -1,6 +1,6 @@
 @props(['post'])
 
-<article class="card w-full max-w-xl mx-auto mb-6 border-1 border-transparent hover:border-secondary cursor-pointer">
+<article class="card max-w-xl mb-6 border-1 border-transparent hover:border-secondary cursor-pointer">
     <a href="#" class="size-full absolute"></a>
     <div class="card-body pb-3 pt-5 px-6">
         @php
@@ -36,13 +36,11 @@
                             aria-expanded="false" aria-label="Dropdown">
                             <span class="icon-[tabler--dots] hover:text-secondary-content size-6"></span>
                         </button>
-
                         <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
                             role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
                             <li><a class="dropdown-item" href="#">Edit</a></li>
                             <li><a class="dropdown-item" href="#">Delete</a></li>
                         </ul>
-
                     </div>
                 @endif
             @endauth
