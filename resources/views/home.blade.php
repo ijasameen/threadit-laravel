@@ -1,3 +1,5 @@
 <x-layout.app>
-    <h2>Peace!</h2>
+    @foreach ($posts as $post)
+        <x-post-card :$post />
+    @endforeach
 </x-layout.app>

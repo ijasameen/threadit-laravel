@@ -1,0 +1,75 @@
+@props(['post'])
+
+<article class="card w-full max-w-xl mx-auto mb-6 border-1 border-transparent hover:border-secondary cursor-pointer">
+    <a href="#" class="size-full absolute"></a>
+    <div class="card-body pb-3 pt-5 px-6">
+        @php
+            $interval = date_diff($post->published_at, new DateTime());
+            $units = [
+                'y' => 'year',
+                'm' => 'month',
+                'd' => 'day',
+                'h' => 'hour',
+                'i' => 'minute',
+                's' => 'second',
+            ];
+
+            foreach ($units as $prop => $label) {
+                if ($interval->$prop > 0) {
+                    $count = $interval->$prop;
+                    $ago = "$count $label" . ($count > 1 ? 's' : '') . ' ago';
+                    break;
+                }
+            }
+
+            $ago ??= 'just now';
+        @endphp
+        <div class="flex justify-between relative">
+            <div class=" text-left">
+                <a href="#" class="hover:underline">{{ $post->user->username }}</a> •
+                <span class="text-sm">{{ $ago }}</span>
+            </div>
+            @auth
+                @if (Auth::user()->id == $post->user->id)
+                    <div class="dropdown inline-flex">
+                        <button id="dropdown-menu-icon" type="button" class="dropdown-toggle" aria-haspopup="menu"
+                            aria-expanded="false" aria-label="Dropdown">
+                            <span class="icon-[tabler--dots] hover:text-secondary-content size-6"></span>
+                        </button>
+
+                        <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
+                            role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
+                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                        </ul>
+
+                    </div>
+                @endif
+            @endauth
+        </div>
+        <h3 class="card-title mb-2.5">{{ $post->summary }}</h3>
+        <p class="mb-4 text-sm">{{ $post->body }}</p>
+        <div class="flex gap-x-2 relative">
+            <div class="flex items-center">
+                <button type="button" class="btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">
+                    <span class="icon-[tabler--arrow-big-up] size-5"></span>
+                    <span>3</span>
+                </button>
+                <button type="button" class="btn btn-soft rounded-br-full rounded-tr-full text-secondary-content pl-2">
+                    <span class="icon-[tabler--arrow-big-down] size-5"></span>
+                    <span>3</span>
+                </button>
+            </div>
+            <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+                <span class="icon-[tabler--message-circle] size-5"></span>
+                <span>3</span>
+            </button>
+            <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+                <span class="icon-[tabler--bookmark] size-5"></span>
+            </button>
+            <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+                <span class="icon-[tabler--share-3] size-5"></span>
+            </button>
+        </div>
+    </div>
+</article>
