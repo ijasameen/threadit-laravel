@@ -15,7 +15,7 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function show(?string $username, int $id, string $slug): View | RedirectResponse
+    public function show(Request $request, ?string $username, int $id, string $slug): View | RedirectResponse
     {
         $post = Post::find($id);
         $owner = User::find($post->user_id);
@@ -27,7 +27,9 @@ class PostController extends Controller
             return redirect(route('posts.show', ['username' => $owner->username, 'id' => $id, 'slug' => $post->slug]));
         }
 
-        return view('post.show', ['post' => $post, 'user' => Auth::user()]);
+        $back_url = route('home');
+
+        return view('post.show', ['post' => $post, 'user' => Auth::user(), 'back_url' => $back_url]);
     }
 
     public function create(Request $request, string $username): View | RedirectResponse

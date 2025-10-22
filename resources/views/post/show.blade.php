@@ -24,9 +24,12 @@
 
                 $ago ??= 'just now';
             @endphp
-            <div class="flex justify-between relative">
+            <div class="flex justify-between mb-3">
                 <div class=" text-left">
-                    <a href="#" class="hover:underline">{{ $post->user->username }}</a> •
+                    <div class="btn btn-circle btn-outline size-9">
+                        <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
+                    </div>
+                    <a href="#" class="ml-2 hover:underline">{{ $post->user->username }}</a> •
                     <span class="text-sm">{{ $ago }}</span>
                     @if ($post->isPrivate())
                         <span class="ml-0.5 text-xs font-bold bg-base-200 py-1 px-2 rounded-full">Private</span>
@@ -52,9 +55,9 @@
                     @endif
                 @endauth
             </div>
-            <h2 class="text-base-content text-3xl mb-6">{{ $post->summary }}</h2>
+            <h2 class="text-base-content text-3xl mb-3">{{ $post->summary }}</h2>
             <p class="mb-4">{{ $post->body }}</p>
-            <div class="flex gap-x-2 relative">
+            <div class="flex gap-x-2">
                 <div class="flex items-center">
                     <button type="button"
                         class="btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">

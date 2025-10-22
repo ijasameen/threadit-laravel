@@ -25,9 +25,9 @@
 
             $ago ??= 'just now';
         @endphp
-        <div class="flex justify-between relative">
+        <div class="flex justify-between">
             <div class=" text-left">
-                <a href="#" class="hover:underline">{{ $post->user->username }}</a> •
+                <a href="#" class="hover:underline relative">{{ $post->user->username }}</a> •
                 <span class="text-sm">{{ $ago }}</span>
                 @if ($post->isPrivate())
                     <span class="ml-0.5 text-xs font-bold bg-base-200 py-1 px-2 rounded-full">Private</span>
@@ -36,7 +36,7 @@
             @auth
                 @if ($user->id == $post->user->id)
                     <div class="dropdown inline-flex">
-                        <button id="dropdown-menu-icon" type="button" class="dropdown-toggle" aria-haspopup="menu"
+                        <button id="dropdown-menu-icon" type="button" class="dropdown-toggle relative" aria-haspopup="menu"
                             aria-expanded="false" aria-label="Dropdown">
                             <span class="icon-[tabler--dots] hover:text-secondary-content size-6"></span>
                         </button>
@@ -55,8 +55,8 @@
         </div>
         <h3 class="card-title mb-2.5">{{ $post->summary }}</h3>
         <p class="mb-4 text-sm">{{ $post->body }}</p>
-        <div class="flex gap-x-2 relative">
-            <div class="flex items-center">
+        <div class="flex gap-x-2">
+            <div class="flex items-center relative">
                 <button type="button" class="btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">
                     <span class="icon-[tabler--arrow-big-up] size-5"></span>
                     <span>3</span>
@@ -66,14 +66,14 @@
                     <span>3</span>
                 </button>
             </div>
-            <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+            <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--message-circle] size-5"></span>
                 <span>3</span>
             </button>
-            <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+            <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--bookmark] size-5"></span>
             </button>
-            <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+            <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--share-3] size-5"></span>
             </button>
         </div>
