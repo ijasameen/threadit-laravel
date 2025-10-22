@@ -6,7 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomeController::class);
+Route::get('/', HomeController::class)->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('signup', [RegisteredUserController::class, 'create'])
@@ -23,6 +23,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy']);
 
-    Route::get('/u/{username}/posts/create', [PostController::class, 'create']);
-    Route::post('/u/{username}/posts', [PostController::class, 'store']);
+    Route::get('{username}/posts/create', [PostController::class, 'create'])->name('posts.create');
+
+    Route::post('{username}/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::patch('{username}/posts', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('{username}/posts', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::get('{username}/posts/edit/{id}/{slug?}', [PostController::class, 'edit'])->name('posts.edit');
+    Route::get('{username}/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');
 });

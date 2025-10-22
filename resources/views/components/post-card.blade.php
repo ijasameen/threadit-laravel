@@ -1,7 +1,8 @@
-@props(['post'])
+@props(['post', 'user'])
 
 <article class="card max-w-xl mb-6 border-1 border-transparent hover:border-secondary cursor-pointer">
-    <a href="#" class="size-full absolute"></a>
+    <a href="{{ route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
+        class="size-full absolute"></a>
     <div class="card-body pb-3 pt-5 px-6">
         @php
             $interval = date_diff($post->published_at, new DateTime());
@@ -28,9 +29,12 @@
             <div class=" text-left">
                 <a href="#" class="hover:underline">{{ $post->user->username }}</a> •
                 <span class="text-sm">{{ $ago }}</span>
+                @if ($post->isPrivate())
+                    <span class="ml-0.5 text-xs font-bold bg-base-200 py-1 px-2 rounded-full">Private</span>
+                @endif
             </div>
             @auth
-                @if (Auth::user()->id == $post->user->id)
+                @if ($user->id == $post->user->id)
                     <div class="dropdown inline-flex">
                         <button id="dropdown-menu-icon" type="button" class="dropdown-toggle" aria-haspopup="menu"
                             aria-expanded="false" aria-label="Dropdown">
@@ -38,8 +42,12 @@
                         </button>
                         <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
                             role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                            <li>
+                                <a href="{{ route('posts.edit', ['username' => $user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
+                                    class="dropdown-item" href="#">Edit</a>
+                            </li>
+                            <li><button type="submit" form="deleteForm_{{ $post->id }}"
+                                    class="dropdown-item">Delete</button></li>
                         </ul>
                     </div>
                 @endif
@@ -70,4 +78,12 @@
             </button>
         </div>
     </div>
+    @auth
+        <form id="deleteForm_{{ $post->id }}" method="POST"
+            action="{{ route('posts.destroy', ['username' => $user->username]) }}" hidden>
+            @csrf
+            @method('DELETE')
+            <input name="id" type="text" hidden value="{{ $post->id }}">
+        </form>
+    @endauth
 </article>

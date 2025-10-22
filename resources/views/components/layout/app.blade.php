@@ -88,7 +88,7 @@
                     @endguest
                 </div>
 
-                <div class="w-full max-w-xl mx-auto">
+                <div class="w-full max-w-3xl mx-auto">
                     {{ $slot }}
                 </div>
             </main>

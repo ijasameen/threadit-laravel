@@ -18,6 +18,14 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function isPublic(): bool {
+        return $this->visibility === PostVisibility::PUBLIC;
+    }
+
+    public function isPrivate(): bool {
+        return $this->visibility === PostVisibility::PRIVATE;
+    }
+
     protected function casts(): array
     {
         return [

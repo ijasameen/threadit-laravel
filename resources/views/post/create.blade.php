@@ -1,6 +1,8 @@
 <x-layout.app>
     <h2 class="text-base-content text-3xl mb-6">New post</h2>
-    <form method="POST" action="/u/{{ $user->username }}/posts" class="flex flex-col gap-2">
+    <form method="POST" action="{{ route('posts.store', ['username' => $user->username]) }}"
+        class="flex flex-col
+        gap-2">
         @csrf
 
         <div>
@@ -22,6 +24,7 @@
         </div>
         <div class="ml-auto">
             <button type="submit" id="formSubmitBtn" class="btn btn-primary">Post</button>
+            <a href="{{ $cancel_url }}" class="btn btn-error btn-soft">Cancel</a>
         </div>
     </form>
 </x-layout.app>
