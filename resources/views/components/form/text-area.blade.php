@@ -1,1 +1,3 @@
-<textarea {{ $attributes->merge(['class' => 'textarea']) }}></textarea>
+@props(['value'])
+
+<textarea {{ $attributes->merge(['class' => 'textarea']) }}>{{ $value }}</textarea>
