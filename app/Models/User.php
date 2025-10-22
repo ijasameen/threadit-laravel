@@ -40,6 +40,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Reply::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -68,7 +68,7 @@
             </div>
             <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--message-circle] size-5"></span>
-                <span>3</span>
+                <span>{{ count($post->replies) }}</span>
             </button>
             <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--bookmark] size-5"></span>
@@ -79,8 +79,7 @@
         </div>
     </div>
     @auth
-        <form id="deleteForm_{{ $post->id }}" method="POST"
-            action="{{ route('posts.destroy', ['username' => $user->username]) }}" hidden>
+        <form id="deleteForm_{{ $post->id }}" method="POST" action="{{ route('posts.destroy') }}" hidden>
             @csrf
             @method('DELETE')
             <input name="id" type="text" hidden value="{{ $post->id }}">

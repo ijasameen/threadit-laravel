@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\ReplyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -25,10 +26,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('{username}/posts/create', [PostController::class, 'create'])->name('posts.create');
 
-    Route::post('{username}/posts', [PostController::class, 'store'])->name('posts.store');
-    Route::patch('{username}/posts', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('{username}/posts', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('posts', [PostController::class, 'store'])->name('posts.store');
+    Route::patch('posts', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('posts', [PostController::class, 'destroy'])->name('posts.destroy');
 
     Route::get('{username}/posts/edit/{id}/{slug?}', [PostController::class, 'edit'])->name('posts.edit');
-    Route::get('{username}/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');
+
+    Route::post('replies', [ReplyController::class, 'store'])->name('replies.store');
 });
+
+Route::get('{username}/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');

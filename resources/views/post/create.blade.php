@@ -1,7 +1,6 @@
 <x-layout.app>
     <h2 class="text-base-content text-3xl mb-6">New post</h2>
-    <form method="POST" action="{{ route('posts.store', ['username' => $user->username]) }}"
-        class="flex flex-col
+    <form method="POST" action="{{ route('posts.store') }}" class="flex flex-col
         gap-2">
         @csrf
 

@@ -1,91 +1,124 @@
-@props(['user'])
-
 <x-layout.app>
-    <div class="card w-full max-w-2xl mx-auto bg-base-200 border-1 border-neutral">
-        <div class="card-body">
-            @php
-                $interval = date_diff($post->published_at, new DateTime());
-                $units = [
-                    'y' => 'year',
-                    'm' => 'month',
-                    'd' => 'day',
-                    'h' => 'hour',
-                    'i' => 'minute',
-                    's' => 'second',
-                ];
+    <div class="w-full max-w-3xl mx-auto ">
+        <div class="card w-full bg-base-200 border-1 border-neutral mb-4">
+            <div class="card-body">
+                @php
+                    $interval = date_diff($post->published_at, new DateTime());
+                    $units = [
+                        'y' => 'year',
+                        'm' => 'month',
+                        'd' => 'day',
+                        'h' => 'hour',
+                        'i' => 'minute',
+                        's' => 'second',
+                    ];
 
-                foreach ($units as $prop => $label) {
-                    if ($interval->$prop > 0) {
-                        $count = $interval->$prop;
-                        $ago = "$count $label" . ($count > 1 ? 's' : '') . ' ago';
-                        break;
+                    foreach ($units as $prop => $label) {
+                        if ($interval->$prop > 0) {
+                            $count = $interval->$prop;
+                            $ago = "$count $label" . ($count > 1 ? 's' : '') . ' ago';
+                            break;
+                        }
                     }
-                }
 
-                $ago ??= 'just now';
-            @endphp
-            <div class="flex justify-between mb-3">
-                <div class=" text-left">
-                    <div class="btn btn-circle btn-outline size-9">
-                        <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
-                    </div>
-                    <a href="#" class="ml-2 hover:underline">{{ $post->user->username }}</a> •
-                    <span class="text-sm">{{ $ago }}</span>
-                    @if ($post->isPrivate())
-                        <span class="ml-0.5 text-xs font-bold bg-base-200 py-1 px-2 rounded-full">Private</span>
-                    @endif
-                </div>
-                @auth
-                    @if (Auth::user()->id == $post->user->id)
-                        <div class="dropdown inline-flex">
-                            <button id="dropdown-menu-icon" type="button" class="dropdown-toggle" aria-haspopup="menu"
-                                aria-expanded="false" aria-label="Dropdown">
-                                <span class="icon-[tabler--dots] hover:text-secondary-content size-6"></span>
-                            </button>
-                            <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
-                                role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
-                                <li>
-                                    <a href="{{ route('posts.edit', ['username' => Auth::user()->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
-                                        class="dropdown-item" href="#">Edit</a>
-                                </li>
-                                <li><button type="submit" form="deleteForm_{{ $post->id }}"
-                                        class="dropdown-item">Delete</button></li>
-                            </ul>
+                    $ago ??= 'just now';
+                @endphp
+                <div class="flex justify-between mb-3">
+                    <div class=" text-left">
+                        <div class="btn btn-circle btn-outline size-9">
+                            <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
                         </div>
-                    @endif
-                @endauth
-            </div>
-            <h2 class="text-base-content text-3xl mb-3">{{ $post->summary }}</h2>
-            <p class="mb-4">{{ $post->body }}</p>
-            <div class="flex gap-x-2">
-                <div class="flex items-center">
-                    <button type="button"
-                        class="btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">
-                        <span class="icon-[tabler--arrow-big-up] size-5"></span>
+                        <a href="#" class="ml-2 hover:underline">{{ $post->user->username }}</a> •
+                        <span class="text-sm">{{ $ago }}</span>
+                        @if ($post->isPrivate())
+                            <span class="ml-0.5 text-xs font-bold bg-base-200 py-1 px-2 rounded-full">Private</span>
+                        @endif
+                    </div>
+                    @auth
+                        @if (Auth::user()->id == $post->user->id)
+                            <div class="dropdown inline-flex">
+                                <button id="dropdown-menu-icon" type="button" class="dropdown-toggle" aria-haspopup="menu"
+                                    aria-expanded="false" aria-label="Dropdown">
+                                    <span class="icon-[tabler--dots] hover:text-secondary-content size-6"></span>
+                                </button>
+                                <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
+                                    role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
+                                    <li>
+                                        <a href="{{ route('posts.edit', ['username' => Auth::user()->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
+                                            class="dropdown-item" href="#">Edit</a>
+                                    </li>
+                                    <li><button type="submit" form="deleteForm_{{ $post->id }}"
+                                            class="dropdown-item">Delete</button></li>
+                                </ul>
+                            </div>
+                        @endif
+                    @endauth
+                </div>
+                <h2 class="text-base-content text-3xl mb-3">{{ $post->summary }}</h2>
+                <p class="mb-4">{{ $post->body }}</p>
+                <div class="flex gap-x-2">
+                    <div class="flex items-center">
+                        <button type="button"
+                            class="btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">
+                            <span class="icon-[tabler--arrow-big-up] size-5"></span>
+                            <span>3</span>
+                        </button>
+                        <button type="button"
+                            class="btn btn-soft rounded-br-full rounded-tr-full text-secondary-content pl-2">
+                            <span class="icon-[tabler--arrow-big-down] size-5"></span>
+                            <span>3</span>
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+                        <span class="icon-[tabler--message-circle] size-5"></span>
                         <span>3</span>
                     </button>
-                    <button type="button"
-                        class="btn btn-soft rounded-br-full rounded-tr-full text-secondary-content pl-2">
-                        <span class="icon-[tabler--arrow-big-down] size-5"></span>
-                        <span>3</span>
+                    <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+                        <span class="icon-[tabler--bookmark] size-5"></span>
+                    </button>
+                    <button type="button" class="btn btn-soft rounded-full text-secondary-content">
+                        <span class="icon-[tabler--share-3] size-5"></span>
                     </button>
                 </div>
-                <button type="button" class="btn btn-soft rounded-full text-secondary-content">
-                    <span class="icon-[tabler--message-circle] size-5"></span>
-                    <span>3</span>
-                </button>
-                <button type="button" class="btn btn-soft rounded-full text-secondary-content">
-                    <span class="icon-[tabler--bookmark] size-5"></span>
-                </button>
-                <button type="button" class="btn btn-soft rounded-full text-secondary-content">
-                    <span class="icon-[tabler--share-3] size-5"></span>
-                </button>
             </div>
+        </div>
+        <div>
+            @auth
+                <form method="POST" action="{{ route('replies.store') }}" class="mx-5 mb-3 space-y-2 flex flex-col">
+                    @csrf
+
+                    <div>
+                        <input name="post_id" type="text" hidden value="{{ $post->id }}">
+                        <x-form.text-area name="body" id="body" autocomplete='body' placeholder="Reply"
+                            :value="old('body')" rows=3 />
+                        <x-form.error :messages="$errors->get('body')" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary self-end w-full max-w-28">Reply</button>
+                </form>
+            @endauth
+            <ul class="menu">
+                @foreach ($replies as $reply)
+                    <li>
+                        <a href="#">
+                            {{ $reply->body }}
+                        </a>
+                        <ul class="menu">
+                            @foreach ($reply->childReplies as $reply)
+                                <li>
+                                    <a href="#">
+                                        {{ $reply->body }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
     @auth
-        <form id="deleteForm_{{ $post->id }}" method="POST"
-            action="{{ route('posts.destroy', ['username' => $user->username]) }}" hidden>
+        <form id="deleteForm_{{ $post->id }}" method="POST" action="{{ route('posts.destroy') }}" hidden>
             @csrf
             @method('DELETE')
             <input name="id" type="text" hidden value="{{ $post->id }}">

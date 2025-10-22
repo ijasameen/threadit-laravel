@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Reply;
 use App\Models\User;
 use App\PostStatus;
 use App\PostVisibility;
@@ -15,24 +16,29 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function show(Request $request, ?string $username, int $id, string $slug): View | RedirectResponse
+    public function show(?string $username, int $id, string $slug): View|RedirectResponse
     {
         $post = Post::find($id);
         $owner = User::find($post->user_id);
 
         if (! $post || ! $owner) {
             abort(404);
-        }
-        else if ($post->slug !== $slug || $username !== $owner->username) {
+        } elseif ($post->slug !== $slug || $username !== $owner->username) {
             return redirect(route('posts.show', ['username' => $owner->username, 'id' => $id, 'slug' => $post->slug]));
         }
 
+        $replies = Reply::with('childReplies')
+            ->where('post_id', '=', $post->id)
+            ->where('parent_reply_id', '=', null)
+            ->latest()
+            ->get();
+
         $back_url = route('home');
 
-        return view('post.show', ['post' => $post, 'user' => Auth::user(), 'back_url' => $back_url]);
+        return view('post.show', ['post' => $post, 'user' => Auth::user(), 'replies' => $replies, 'back_url' => $back_url]);
     }
 
-    public function create(Request $request, string $username): View | RedirectResponse
+    public function create(Request $request, string $username): View|RedirectResponse
     {
         $user = Auth::user();
 
@@ -68,24 +74,21 @@ class PostController extends Controller
         return to_route('home');
     }
 
-    public function edit(Request $request, string $username, int $id, ?string $slug = null): View | RedirectResponse
+    public function edit(Request $request, string $username, int $id, ?string $slug = null): View|RedirectResponse
     {
         $user = Auth::user();
         $post = Post::find($id);
 
-        if (! $post){
+        if (! $post) {
             abort(404);
-        }
-        else if ($post->user_id !== $user->id) {
+        } elseif ($post->user_id !== $user->id) {
             // TODO: redirect to home with a unauthorized message
             abort(403, 'You are not authorized to edit this post.');
-        }
-        else if ($user->username !== $username) {
-            return to_route('posts.edit', ['username' => $user->username, 'id' => $id, 'slug'=> $post->slug]);
-        }
-        else if ($post->slug !== $slug){
+        } elseif ($user->username !== $username) {
+            return to_route('posts.edit', ['username' => $user->username, 'id' => $id, 'slug' => $post->slug]);
+        } elseif ($post->slug !== $slug) {
             // TODO: Show a message that the title/summary was changed
-            return to_route('posts.edit', ['username' => $username, 'id' => $post->id, 'slug'=> $post->slug]);
+            return to_route('posts.edit', ['username' => $username, 'id' => $post->id, 'slug' => $post->slug]);
         }
 
         $cancel_url = back()->getTargetUrl();
@@ -99,10 +102,9 @@ class PostController extends Controller
         $user = Auth::user();
         $post = Post::find($request->id);
 
-        if (! $post){
+        if (! $post) {
             abort(500);
-        }
-        else if ($post->user_id !== $user->id) {
+        } elseif ($post->user_id !== $user->id) {
             // TODO: redirect to home with a unauthorized message
             abort(403, 'You are not authorized to edit this post.');
         }
@@ -112,7 +114,7 @@ class PostController extends Controller
             'body' => ['string', 'nullable'],
         ]);
 
-        $is_public = (bool)$request->is_public;
+        $is_public = (bool) $request->is_public;
         $post->summary = $request->summary;
         $post->body = $request->body;
         $post->visibility = $is_public ? PostVisibility::PUBLIC : PostVisibility::PRIVATE;
@@ -127,10 +129,9 @@ class PostController extends Controller
         $user = Auth::user();
         $post = Post::find($request->id);
 
-        if (! $post){
+        if (! $post) {
             abort(500);
-        }
-        else if ($post->user_id !== $user->id) {
+        } elseif ($post->user_id !== $user->id) {
             // TODO: redirect to home with a unauthorized message
             abort(403, 'You are not authorized to delete this post.');
         }
