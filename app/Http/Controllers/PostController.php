@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\Reply;
 use App\Models\User;
 use App\PostStatus;
 use App\PostVisibility;
@@ -27,10 +26,10 @@ class PostController extends Controller
             return redirect(route('posts.show', ['username' => $owner->username, 'id' => $id, 'slug' => $post->slug]));
         }
 
-        $replies = Reply::with('childReplies')
-            ->where('post_id', '=', $post->id)
-            ->where('parent_reply_id', '=', null)
-            ->latest()
+        $replies = $post->replies()
+            ->whereNull('parent_reply_id')
+            ->with('childRepliesRecursive.user')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         $back_url = route('home');

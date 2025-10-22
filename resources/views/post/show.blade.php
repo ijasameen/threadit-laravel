@@ -100,15 +100,67 @@
             <ul class="menu">
                 @foreach ($replies as $reply)
                     <li>
-                        <a href="#">
-                            {{ $reply->body }}
-                        </a>
+                        <div class="block">
+                            <a class="block mb-2 hover:underline relative"
+                                href="$">{{ $reply->user->username }}</a>
+                            <a class="block mb-3" href="#">
+                                {{ $reply->body }}
+                            </a>
+                            <div class="flex gap-x-2">
+                                <div class="flex items-center">
+                                    <button type="button"
+                                        class="btn btn-soft btn-sm rounded-bl-full rounded-tl-full text-secondary-content pr-3">
+                                        <span class="icon-[tabler--arrow-big-up] size-4"></span>
+                                        <span>3</span>
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-soft btn-sm rounded-br-full rounded-tr-full text-secondary-content pl-2">
+                                        <span class="icon-[tabler--arrow-big-down] size-4"></span>
+                                        <span>1</span>
+                                    </button>
+                                </div>
+                                <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content">
+                                    <span class="icon-[tabler--message-circle] size-4"></span>
+                                    <span>{{ count($reply->childReplies) }}</span>
+                                </button>
+                                <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content">
+                                    <span class="icon-[tabler--share-3] size-4"></span>
+                                </button>
+                            </div>
+                        </div>
                         <ul class="menu">
                             @foreach ($reply->childReplies as $reply)
                                 <li>
-                                    <a href="#">
-                                        {{ $reply->body }}
-                                    </a>
+                                    <div class="block">
+                                        <a class="block mb-2 hover:underline relative"
+                                            href="$">{{ $reply->user->username }}</a>
+                                        <a class="block mb-3" href="#">
+                                            {{ $reply->body }}
+                                        </a>
+                                        <div class="flex gap-x-2">
+                                            <div class="flex items-center">
+                                                <button type="button"
+                                                    class="btn btn-soft btn-sm rounded-bl-full rounded-tl-full text-secondary-content pr-3">
+                                                    <span class="icon-[tabler--arrow-big-up] size-4"></span>
+                                                    <span>3</span>
+                                                </button>
+                                                <button type="button"
+                                                    class="btn btn-soft btn-sm rounded-br-full rounded-tr-full text-secondary-content pl-2">
+                                                    <span class="icon-[tabler--arrow-big-down] size-4"></span>
+                                                    <span>1</span>
+                                                </button>
+                                            </div>
+                                            <button type="button"
+                                                class="btn btn-soft btn-sm rounded-full text-secondary-content">
+                                                <span class="icon-[tabler--message-circle] size-4"></span>
+                                                <span>{{ count($reply->childReplies) }}</span>
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-soft btn-sm rounded-full text-secondary-content">
+                                                <span class="icon-[tabler--share-3] size-4"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>

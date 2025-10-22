@@ -31,4 +31,9 @@ class Reply extends Model
     {
         return $this->hasMany(Reply::class, 'parent_reply_id');
     }
+
+    public function childRepliesRecursive(): HasMany
+    {
+        return $this->childReplies()->with('childRepliesRecursive');
+    }
 }
