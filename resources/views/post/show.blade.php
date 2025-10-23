@@ -18,7 +18,7 @@
             @endauth
             <x-list.replies>
                 @foreach ($replies as $reply)
-                    <x-list.item.reply :$reply />
+                    <x-list.item.reply :$reply :$user />
                 @endforeach
             </x-list.replies>
         </div>

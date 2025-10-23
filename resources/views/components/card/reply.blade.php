@@ -1,4 +1,4 @@
-@props(['reply', 'isLink' => true])
+@props(['reply', 'user', 'isLink' => true])
 
 @php
     $link = route('replies.show', ['username' => $reply->user->username, 'id' => $reply->id]);
@@ -61,15 +61,20 @@
     </a>
     <div class="flex gap-x-2">
         <div class="flex items-center relative">
-            <button type="button"
-                class="btn btn-soft btn-sm rounded-bl-full rounded-tl-full text-secondary-content pr-3">
-                <span class="icon-[tabler--arrow-big-up] size-4"></span>
-                <span>3</span>
+            <button type="button" data-vote="up" data-votable-type="reply" data-votable-id="{{ $reply->id }}"
+                class="vote-btn btn btn-soft btn-sm rounded-bl-full rounded-tl-full text-secondary-content pr-3">
+                <span id="reply_{{ $reply->id }}_upvote-indicator"
+                    {{ $reply->getVoteForUser($user)?->value > 0 ? 'data-fill' : '' ?? '' }}
+                    class="data-[fill]:icon-[tabler--arrow-big-up-filled] data-[fill]:size-5 pointer-events-none icon-[tabler--arrow-big-up] size-5"></span>
+                <span id="reply_{{ $reply->id }}_upvotes" class="pointer-events-none">{{ $reply->upVotes() }}</span>
             </button>
-            <button type="button"
-                class="btn btn-soft btn-sm rounded-br-full rounded-tr-full text-secondary-content pl-2">
-                <span class="icon-[tabler--arrow-big-down] size-4"></span>
-                <span>1</span>
+            <button type="button" data-vote="down" data-votable-type="reply" data-votable-id="{{ $reply->id }}"
+                class="vote-btn btn btn-soft btn-sm rounded-br-full rounded-tr-full text-secondary-content pl-2">
+                <span id="reply_{{ $reply->id }}_downvote-indicator"
+                    {{ $reply->getVoteForUser($user)?->value < 0 ? 'data-fill' : '' ?? '' }}
+                    class="data-[fill]:icon-[tabler--arrow-big-down-filled] data-[fill]:size-5 pointer-events-none icon-[tabler--arrow-big-down] size-5"></span>
+                <span id="reply_{{ $reply->id }}_downvotes"
+                    class="pointer-events-none">{{ $reply->downVotes() }}</span>
             </button>
         </div>
         <a href="{{ $link }}" type="button"

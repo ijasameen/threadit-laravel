@@ -105,7 +105,8 @@
             <a href="{{ route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
                 class="btn btn-outline">Go to post</a>
         </div>
-        <x-card.reply class="bg-base-200 border-1 border-neutral mb-4 p-6 rounded-lg" :$reply :is-link="false" />
+        <x-card.reply class="bg-base-200 border-1 border-neutral mb-4 p-6 rounded-lg" :$reply :$user
+            :is-link="false" />
         @auth
             <form method="POST" action="{{ route('replies.store') }}" class="mx-5 mb-3 space-y-2 flex flex-col">
                 @csrf
@@ -123,7 +124,7 @@
         @endauth
         <x-list.replies>
             @foreach ($reply->childReplies as $childReply)
-                <x-list.item.reply :reply="$childReply" />
+                <x-list.item.reply :reply="$childReply" :$user />
             @endforeach
         </x-list.replies>
     </div>

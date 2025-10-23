@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Reply extends Model
 {
@@ -35,5 +36,25 @@ class Reply extends Model
     public function childRepliesRecursive(): HasMany
     {
         return $this->childReplies()->with('childRepliesRecursive');
+    }
+
+    public function votes(): MorphMany
+    {
+        return $this->morphMany(Vote::class, 'votable');
+    }
+
+    public function upVotes(): int
+    {
+        return $this->votes->where('value', '>', 0)->count();
+    }
+
+    public function downVotes(): int
+    {
+        return $this->votes->where('value', '<', 0)->count();
+    }
+
+    public function getVoteForUser(User $user): ?Vote
+    {
+        return $this->votes->where('user_id', '=', $user->id)->first();
     }
 }
