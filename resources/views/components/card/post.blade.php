@@ -1,11 +1,17 @@
-@props(['post', 'user', 'link'])
+@props(['post', 'user', 'isLink' => true])
 
 @php
+    $link = route('posts.show', [
+        'username' => $post->user->username,
+        'id' => $post->id,
+        'slug' => $post->slug,
+    ]);
+
     $link_class = ' hover:border-secondary cursor-pointer';
 @endphp
 
-<article class="card max-w-xl mb-6 border-1 border-transparent{{ isset($link) ? $link_class : '' }}">
-    @if (isset($link))
+<article class="card max-w-xl mb-6 border-1 border-transparent{{ $isLink ? $link_class : '' }}">
+    @if ($isLink)
         <a href="{{ $link }}" class="size-full absolute"></a>
     @endif
     <div class="card-body pb-3 pt-5 px-6">
@@ -71,10 +77,11 @@
                     <span>3</span>
                 </button>
             </div>
-            <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
+            <a href="{{ $link }}" type="button"
+                class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--message-circle] size-5"></span>
                 <span>{{ count($post->replies) }}</span>
-            </button>
+            </a>
             <button type="button" class="btn btn-soft rounded-full text-secondary-content relative">
                 <span class="icon-[tabler--bookmark] size-5"></span>
             </button>

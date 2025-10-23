@@ -92,13 +92,13 @@
             </div>
         </div>
         <div class="flex gap-2">
-            <div class="btn btn-circle btn-outline size-9">
-                <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
-            </div>
+            <a href="{{ $back_url }}" class="btn btn-circle btn-outline size-9">
+                <span class="size-6 icon-[tabler--arrow-left]"></span>
+            </a>
             <a href="{{ route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
                 class="btn btn-outline">Go to post</a>
         </div>
-        <x-card.reply class="bg-base-200 border-1 border-neutral mb-4 p-6 rounded-lg" :$reply />
+        <x-card.reply class="bg-base-200 border-1 border-neutral mb-4 p-6 rounded-lg" :$reply :is-link="false" />
         @auth
             <form method="POST" action="{{ route('replies.store') }}" class="mx-5 mb-3 space-y-2 flex flex-col">
                 @csrf

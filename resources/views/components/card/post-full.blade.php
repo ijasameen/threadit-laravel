@@ -26,9 +26,9 @@
         <div class="flex justify-between mb-3">
             <div class=" text-left">
                 @if (isset($back_url))
-                    <div class="btn btn-circle btn-outline size-9">
-                        <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
-                    </div>
+                    <a href="{{ $back_url }}" class="btn btn-circle btn-outline size-9">
+                        <span class="size-6 icon-[tabler--arrow-left]"></span>
+                    </a>
                 @endif
                 <a href="#" class="ml-2 hover:underline">{{ $post->user->username }}</a> •
                 <span class="text-sm">{{ $ago }}</span>

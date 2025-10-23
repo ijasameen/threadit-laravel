@@ -11,11 +11,7 @@
 
     <div class="w-fit mx-auto">
         @foreach ($posts as $post)
-            <x-card.post :$post :$user :link="route('posts.show', [
-                'username' => $post->user->username,
-                'id' => $post->id,
-                'slug' => $post->slug,
-            ])" />
+            <x-card.post :$post :$user />
         @endforeach
     </div>
 

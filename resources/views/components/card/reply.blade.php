@@ -1,11 +1,12 @@
-@props(['reply', 'link'])
+@props(['reply', 'isLink' => true])
 
 @php
-    $link_class = ' hover:border-secondary cursor-pointer';
+    $link = route('replies.show', ['username' => $reply->user->username, 'id' => $reply->id]);
+    $dynamic_class = $isLink ? ' hover:border-secondary cursor-pointer' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'block relative']) }}>
-    @if (isset($link))
+<div {{ $attributes->merge(['class' => 'block relative border-1 border-transparent' . $dynamic_class]) }}>
+    @if ($isLink)
         <a href="{{ $link }}" class="size-full absolute"></a>
     @endif
     @php
@@ -71,11 +72,11 @@
                 <span>1</span>
             </button>
         </div>
-        <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content relative">
-            <a href="{{ route('replies.show', ['username' => $reply->user->username, 'id' => $reply->id]) }}"
-                class="icon-[tabler--message-circle] size-4"></a>
+        <a href="{{ $link }}" type="button"
+            class="btn btn-soft btn-sm rounded-full text-secondary-content relative">
+            <span class="icon-[tabler--message-circle] size-4"></span>
             <span>{{ count($reply->childReplies) }}</span>
-        </button>
+        </a>
         <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content relative">
             <span class="icon-[tabler--share-3] size-4"></span>
         </button>
