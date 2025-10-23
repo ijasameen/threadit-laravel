@@ -21,7 +21,7 @@ class ReplyController extends Controller
             redirect(route('replies.show', ['username' => $reply->user->username]));
         }
 
-        $reply->with('post.user')->with('parentReply.user')->with('childRepliesRecursive.user');
+        $reply->with('post.user')->with('parentReplyRecursive.user')->with('childRepliesRecursive.user');
 
         if ($reply->parentReply) {
             $parent_reply = $reply->parentReply;

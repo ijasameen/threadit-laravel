@@ -28,6 +28,11 @@ class Reply extends Model
         return $this->belongsTo(Reply::class);
     }
 
+    public function parentReplyRecursive(): BelongsTo
+    {
+        return $this->parentReply()->with('parentReplyRecursive');
+    }
+
     public function childReplies(): HasMany
     {
         return $this->hasMany(Reply::class, 'parent_reply_id');

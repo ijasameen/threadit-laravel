@@ -105,8 +105,29 @@
             <a href="{{ route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
                 class="btn btn-outline">Go to post</a>
         </div>
-        <x-card.reply class="bg-base-200 border-1 border-neutral mb-4 p-6 rounded-lg" :$reply :$user
-            :is-link="false" />
+        @php
+            $parent_reply = $reply->parentReply;
+            $parent_replies = [];
+            while ($parent_reply !== null) {
+                $parent_replies[] = $parent_reply;
+                $parent_reply = $parent_reply->parentReply;
+            }
+            $parent_replies = array_reverse($parent_replies);
+        @endphp
+        @foreach ($parent_replies as $parent_reply)
+            <ul class="menu">
+                <li>
+                    <x-card.reply :reply="$parent_reply" :$user />
+                </li>
+                <ul class="menu">
+        @endforeach
+        @if (!empty($parent_replies))
+            <li>
+        @endif
+        <x-card.reply class="bg-base-200 mb-4 p-6 rounded-lg" :$reply :$user :is-link="false" :border="true" />
+        @if (!empty($parent_replies))
+            </li>
+        @endif
         @auth
             <form method="POST" action="{{ route('replies.store') }}" class="mx-5 mb-3 space-y-2 flex flex-col">
                 @csrf
@@ -122,10 +143,20 @@
                 <button type="submit" class="btn btn-primary self-end w-full max-w-28">Reply</button>
             </form>
         @endauth
+        @if (!empty($parent_replies))
+            <li>
+        @endif
         <x-list.replies>
             @foreach ($reply->childReplies as $childReply)
                 <x-list.item.reply :reply="$childReply" :$user />
             @endforeach
         </x-list.replies>
+        @if (!empty($parent_replies))
+            </li>
+        @endif
+        @foreach ($parent_replies as $parent_reply)
+            </ul>
+            </ul>
+        @endforeach
     </div>
 </x-layout.app>

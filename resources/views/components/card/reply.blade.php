@@ -1,11 +1,12 @@
-@props(['reply', 'user', 'isLink' => true])
+@props(['reply', 'user', 'isLink' => true, 'border' => false])
 
 @php
     $link = route('replies.show', ['username' => $reply->user->username, 'id' => $reply->id]);
     $dynamic_class = $isLink ? ' hover:border-secondary cursor-pointer' : '';
+    $dynamic_class .= $border ? ' border-neutral' : ' border-transparent';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'block relative border-1 border-transparent' . $dynamic_class]) }}>
+<div {{ $attributes->merge(['class' => 'block relative border-1' . $dynamic_class]) }}>
     @if ($isLink)
         <a href="{{ $link }}" class="size-full absolute"></a>
     @endif
