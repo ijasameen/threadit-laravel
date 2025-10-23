@@ -31,7 +31,9 @@ class ReplyController extends Controller
             $back_url = route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]);
         }
 
-        return view('reply.show', ['reply' => $reply, 'back_url' => $back_url]);
+        $user = Auth::user();
+
+        return view('reply.show', ['reply' => $reply, 'user' => $user, 'back_url' => $back_url]);
     }
 
     public function store(Request $request): RedirectResponse

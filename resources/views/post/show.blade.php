@@ -1,6 +1,6 @@
 <x-layout.app>
     <div class="w-full max-w-3xl mx-auto ">
-        <x-card.post-full :$post :$back_url />
+        <x-card.post-full :$post :$user :$back_url />
         <div>
             @auth
                 <form method="POST" action="{{ route('replies.store') }}" class="mx-5 mb-3 space-y-2 flex flex-col">

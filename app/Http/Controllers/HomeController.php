@@ -14,7 +14,13 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-        $posts = Post::with('user')->with('replies')->where('status', '=', PostStatus::PUBLISHED)->orderBy('published_at', 'DESC')->get();
+        $posts = Post::with('user')
+            ->with('replies')
+            ->with('votes.user')
+            ->where('status', '=', PostStatus::PUBLISHED)
+            ->orderBy('published_at', 'DESC')
+            ->get();
+
         $user = Auth::user();
 
         return view('home', ['posts' => $posts, 'user' => $user]);

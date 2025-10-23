@@ -17,7 +17,7 @@ class PostController extends Controller
 {
     public function show(?string $username, int $id, string $slug): View|RedirectResponse
     {
-        $post = Post::with('replies')->find($id);
+        $post = Post::with('replies.votes')->with('votes')->find($id);
         $owner = User::find($post->user_id);
 
         if (! $post || ! $owner) {

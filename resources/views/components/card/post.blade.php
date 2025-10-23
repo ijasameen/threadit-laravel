@@ -68,13 +68,21 @@
         <p class="mb-4 text-sm">{{ $post->body }}</p>
         <div class="flex gap-x-2">
             <div class="flex items-center relative">
-                <button type="button" class="btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">
-                    <span class="icon-[tabler--arrow-big-up] size-5"></span>
-                    <span>3</span>
+                <button type="button" data-vote="up" data-votable-type="post" data-votable-id="{{ $post->id }}"
+                    class="vote-btn btn btn-soft rounded-bl-full rounded-tl-full text-secondary-content pr-3">
+                    <span id="post_{{ $post->id }}_upvote-indicator"
+                        {{ $post->getVoteForUser($user)?->value > 0 ? 'data-fill' : '' ?? '' }}
+                        class="data-[fill]:icon-[tabler--arrow-big-up-filled] data-[fill]:size-5 pointer-events-none icon-[tabler--arrow-big-up] size-5"></span>
+                    <span id="post_{{ $post->id }}_upvotes"
+                        class="pointer-events-none">{{ $post->upVotes() }}</span>
                 </button>
-                <button type="button" class="btn btn-soft rounded-br-full rounded-tr-full text-secondary-content pl-2">
-                    <span class="icon-[tabler--arrow-big-down] size-5"></span>
-                    <span>3</span>
+                <button type="button" data-vote="down" data-votable-type="post" data-votable-id="{{ $post->id }}"
+                    class="vote-btn btn btn-soft rounded-br-full rounded-tr-full text-secondary-content pl-2">
+                    <span id="post_{{ $post->id }}_downvote-indicator"
+                        {{ $post->getVoteForUser($user)?->value < 0 ? 'data-fill' : '' ?? '' }}
+                        class="data-[fill]:icon-[tabler--arrow-big-down-filled] data-[fill]:size-5 pointer-events-none icon-[tabler--arrow-big-down] size-5"></span>
+                    <span id="post_{{ $post->id }}_downvotes"
+                        class="pointer-events-none">{{ $post->downVotes() }}</span>
                 </button>
             </div>
             <a href="{{ $link }}" type="button"

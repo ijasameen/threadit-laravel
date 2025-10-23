@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Post extends Model
 {
@@ -22,6 +23,26 @@ class Post extends Model
     public function replies(): HasMany
     {
         return $this->hasMany(Reply::class);
+    }
+
+    public function votes(): MorphMany
+    {
+        return $this->morphMany(Vote::class, 'votable');
+    }
+
+    public function upVotes(): int
+    {
+        return $this->votes->where('value', '>', 0)->count();
+    }
+
+    public function downVotes(): int
+    {
+        return $this->votes->where('value', '<', 0)->count();
+    }
+
+    public function getVoteForUser(User $user): ?Vote
+    {
+        return $this->votes->where('user_id', '=', $user->id)->first();
     }
 
     public function isPublic(): bool
