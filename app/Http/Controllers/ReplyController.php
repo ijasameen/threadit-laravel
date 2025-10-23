@@ -31,4 +31,22 @@ class ReplyController extends Controller
 
         return back()->with('success');
     }
+
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+        $reply = Reply::find($request->id);
+
+        if (! $reply) {
+            abort(500);
+        } elseif ($reply->user_id !== $user->id) {
+            // TODO: redirect to home with a unauthorized message
+            abort(403, 'You are not authorized to delete this post.');
+        }
+
+        $reply->delete();
+
+        // TODO: deleted message
+        return back()->with('success');
+    }
 }

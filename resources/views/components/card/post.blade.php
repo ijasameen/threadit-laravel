@@ -1,8 +1,13 @@
-@props(['post', 'user'])
+@props(['post', 'user', 'link'])
 
-<article class="card max-w-xl mb-6 border-1 border-transparent hover:border-secondary cursor-pointer">
-    <a href="{{ route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
-        class="size-full absolute"></a>
+@php
+    $link_class = ' hover:border-secondary cursor-pointer';
+@endphp
+
+<article class="card max-w-xl mb-6 border-1 border-transparent{{ isset($link) ? $link_class : '' }}">
+    @if (isset($link))
+        <a href="{{ $link }}" class="size-full absolute"></a>
+    @endif
     <div class="card-body pb-3 pt-5 px-6">
         @php
             $interval = date_diff($post->published_at, new DateTime());

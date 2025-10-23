@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('{username}/posts/edit/{id}/{slug?}', [PostController::class, 'edit'])->name('posts.edit');
 
     Route::post('replies', [ReplyController::class, 'store'])->name('replies.store');
+    Route::delete('replies', [ReplyController::class, 'destroy'])->name('replies.destroy');
 });
 
 Route::get('{username}/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');
