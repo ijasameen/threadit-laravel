@@ -1,6 +1,13 @@
-@props(['reply'])
+@props(['reply', 'link'])
 
-<div class="block">
+@php
+    $link_class = ' hover:border-secondary cursor-pointer';
+@endphp
+
+<div {{ $attributes->merge(['class' => 'block relative']) }}>
+    @if (isset($link))
+        <a href="{{ $link }}" class="size-full absolute"></a>
+    @endif
     @php
         $interval = date_diff($reply->created_at, new DateTime());
         $units = [
@@ -52,7 +59,7 @@
         {{ $reply->body }}
     </a>
     <div class="flex gap-x-2">
-        <div class="flex items-center">
+        <div class="flex items-center relative">
             <button type="button"
                 class="btn btn-soft btn-sm rounded-bl-full rounded-tl-full text-secondary-content pr-3">
                 <span class="icon-[tabler--arrow-big-up] size-4"></span>
@@ -64,11 +71,12 @@
                 <span>1</span>
             </button>
         </div>
-        <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content">
-            <span class="icon-[tabler--message-circle] size-4"></span>
+        <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content relative">
+            <a href="{{ route('replies.show', ['username' => $reply->user->username, 'id' => $reply->id]) }}"
+                class="icon-[tabler--message-circle] size-4"></a>
             <span>{{ count($reply->childReplies) }}</span>
         </button>
-        <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content">
+        <button type="button" class="btn btn-soft btn-sm rounded-full text-secondary-content relative">
             <span class="icon-[tabler--share-3] size-4"></span>
         </button>
     </div>

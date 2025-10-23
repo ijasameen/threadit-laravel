@@ -37,3 +37,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('{username}/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');
+Route::get('{username}/replies/{id}', [ReplyController::class, 'show'])->name('replies.show');

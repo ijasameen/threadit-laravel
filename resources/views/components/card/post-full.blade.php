@@ -1,6 +1,6 @@
 @props(['post', 'back_url'])
 
-<div class="card w-full bg-base-200 border-1 border-neutral mb-4">
+<div {{ $attributes->merge(['class' => 'card w-full bg-base-200 border-1 border-neutral mb-4']) }}>
     <div class="card-body">
         @php
             $interval = date_diff($post->published_at, new DateTime());
@@ -25,9 +25,11 @@
         @endphp
         <div class="flex justify-between mb-3">
             <div class=" text-left">
-                <div class="btn btn-circle btn-outline size-9">
-                    <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
-                </div>
+                @if (isset($back_url))
+                    <div class="btn btn-circle btn-outline size-9">
+                        <a href="{{ $back_url }}" class="size-6 icon-[tabler--arrow-left]"></a>
+                    </div>
+                @endif
                 <a href="#" class="ml-2 hover:underline">{{ $post->user->username }}</a> •
                 <span class="text-sm">{{ $ago }}</span>
                 @if ($post->isPrivate())
@@ -69,7 +71,7 @@
             </div>
             <button type="button" class="btn btn-soft rounded-full text-secondary-content">
                 <span class="icon-[tabler--message-circle] size-5"></span>
-                <span>3</span>
+                <span>{{ $post->replies()->count() }}</span>
             </button>
             <button type="button" class="btn btn-soft rounded-full text-secondary-content">
                 <span class="icon-[tabler--bookmark] size-5"></span>

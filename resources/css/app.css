@@ -5,6 +5,7 @@
 @import "flyonui/variants.css";
 @source "../../node_modules/flyonui/dist/toggle-password.mjs";
 @source "../../node_modules/flyonui/dist/dropdown.mjs";
+@source "../../node_modules/flyonui/dist/collapse.mjs";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

@@ -17,7 +17,7 @@ class PostController extends Controller
 {
     public function show(?string $username, int $id, string $slug): View|RedirectResponse
     {
-        $post = Post::find($id);
+        $post = Post::with('replies')->find($id);
         $owner = User::find($post->user_id);
 
         if (! $post || ! $owner) {
@@ -34,7 +34,12 @@ class PostController extends Controller
 
         $back_url = route('home');
 
-        return view('post.show', ['post' => $post, 'user' => Auth::user(), 'replies' => $replies, 'back_url' => $back_url]);
+        return view('post.show', [
+            'post' => $post,
+            'user' => Auth::user(),
+            'replies' => $replies,
+            'back_url' => $back_url,
+        ]);
     }
 
     public function create(Request $request, string $username): View|RedirectResponse
