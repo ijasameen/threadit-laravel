@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('votable_type');
             $table->tinyInteger('value');
             $table->timestamps();
+            $table->unique(['user_id', 'votable_id', 'votable_type']);
         });
     }
 

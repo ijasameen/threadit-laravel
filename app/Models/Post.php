@@ -40,8 +40,12 @@ class Post extends Model
         return $this->votes->where('value', '<', 0)->count();
     }
 
-    public function getVoteForUser(User $user): ?Vote
+    public function getVoteForUser(?User $user): ?Vote
     {
+        if (! $user) {
+            return null;
+        }
+
         return $this->votes->where('user_id', '=', $user->id)->first();
     }
 
