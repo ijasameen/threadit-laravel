@@ -32,8 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('posts', [PostController::class, 'destroy'])->name('posts.destroy');
 
     Route::get('{username}/posts/edit/{id}/{slug?}', [PostController::class, 'edit'])->name('posts.edit');
+    Route::get('{username}/replies/edit/{id}', [ReplyController::class, 'edit'])->name('replies.edit');
 
     Route::post('replies', [ReplyController::class, 'store'])->name('replies.store');
+    Route::patch('replies', [ReplyController::class, 'update'])->name('replies.update');
     Route::delete('replies', [ReplyController::class, 'destroy'])->name('replies.destroy');
 
     Route::post('api/votes', [VoteController::class, 'store'])->name('votes.store');

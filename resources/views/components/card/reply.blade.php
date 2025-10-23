@@ -46,7 +46,8 @@
                     <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
                         role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
                         <li>
-                            <a href="#" class="dropdown-item" href="#">Edit</a>
+                            <a href="{{ route('replies.edit', ['username' => $user->username, 'id' => $reply->id]) }}"
+                                class="dropdown-item">Edit</a>
                         </li>
                         <li>
                             <button type="submit" form="deleteReplyForm_{{ $reply->id }}"
@@ -67,7 +68,8 @@
                 <span id="reply_{{ $reply->id }}_upvote-indicator"
                     {{ $reply->getVoteForUser($user)?->value > 0 ? 'data-fill' : '' ?? '' }}
                     class="data-[fill]:icon-[tabler--arrow-big-up-filled] data-[fill]:size-5 pointer-events-none icon-[tabler--arrow-big-up] size-5"></span>
-                <span id="reply_{{ $reply->id }}_upvotes" class="pointer-events-none">{{ $reply->upVotes() }}</span>
+                <span id="reply_{{ $reply->id }}_upvotes"
+                    class="pointer-events-none">{{ $reply->upVotes() }}</span>
             </button>
             <button type="button" data-vote="down" data-votable-type="reply" data-votable-id="{{ $reply->id }}"
                 class="vote-btn btn btn-soft btn-sm rounded-br-full rounded-tr-full text-secondary-content pl-2">
