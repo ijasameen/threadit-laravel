@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\SaveController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('replies', [ReplyController::class, 'destroy'])->name('replies.destroy');
 
     Route::post('api/votes', [VoteController::class, 'store'])->name('votes.store');
+    Route::post('api/saves', [SaveController::class, 'store'])->name('saves.store');
 });
 
 Route::get('{username}/posts/{id}/{slug?}', [PostController::class, 'show'])->name('posts.show');

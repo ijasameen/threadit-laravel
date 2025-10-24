@@ -25,6 +25,23 @@ class Post extends Model
         return $this->hasMany(Reply::class);
     }
 
+    public function saves(): MorphMany
+    {
+        return $this->morphMany(Save::class, 'savable');
+    }
+
+    public function isSavedByUser(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $this
+            ->saves()
+            ->where('user_id', '=', $user->id)
+            ->count() > 0;
+    }
+
     public function votes(): MorphMany
     {
         return $this->morphMany(Vote::class, 'votable');

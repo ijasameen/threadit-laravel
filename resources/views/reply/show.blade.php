@@ -90,8 +90,12 @@
                     <span class="icon-[tabler--message-circle] size-5"></span>
                     <span>3</span>
                 </button>
-                <button type="button" class="btn btn-soft rounded-full text-secondary-content">
-                    <span class="icon-[tabler--bookmark] size-5"></span>
+                <button type="button" {{ $user?->isSavedPost($post) ? 'data-saved="on"' : '' }}
+                    data-savable-type="post" data-savable-id="{{ $post->id }}"
+                    class="btn btn-soft save-btn rounded-full text-secondary-content relative">
+                    <span id="post_{{ $post->id }}_save-indicator"
+                        {{ $post->isSavedByUser($user) ? 'data-fill' : '' }}
+                        class="data-[fill]:icon-[tabler--bookmark-filled] data-[fill]:size-5 pointer-events-none icon-[tabler--bookmark] size-5"></span>
                 </button>
                 <button type="button" class="btn btn-soft rounded-full text-secondary-content">
                     <span class="icon-[tabler--share-3] size-5"></span>

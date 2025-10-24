@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -43,6 +44,23 @@ class User extends Authenticatable
     public function replies(): HasMany
     {
         return $this->hasMany(Reply::class);
+    }
+
+    public function savedPosts(): BelongsToMany
+    {
+        return $this->morphedByMany(Post::class, 'savable', 'saves');
+    }
+
+    public function isSavedPost(?Post $post): bool
+    {
+        if (! $post) {
+            return false;
+        }
+
+        return $this
+            ->savedPosts()
+            ->where('savable_id', '=', $post->id)
+            ->exists();
     }
 
     /**
