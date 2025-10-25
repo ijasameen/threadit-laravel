@@ -1,3 +1,7 @@
+@php
+    $user = auth()->user();
+@endphp
+
 <x-layout.app>
     <div class="w-full max-w-3xl mx-auto ">
         <x-card.post-full :$post :$user :$back_url />

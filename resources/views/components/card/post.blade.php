@@ -3,7 +3,7 @@
 @php
     $link = route('posts.show', [
         'username' => $post->user->username,
-        'id' => $post->id,
+        'post' => $post->id,
         'slug' => $post->slug,
     ]);
 
@@ -54,7 +54,7 @@
                         <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
                             role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
                             <li>
-                                <a href="{{ route('posts.edit', ['username' => $user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
+                                <a href="{{ route('posts.edit', ['username' => $user->username, 'post' => $post->id, 'slug' => $post->slug]) }}"
                                     class="dropdown-item" href="#">Edit</a>
                             </li>
                             <li><button type="submit" form="deleteForm_{{ $post->id }}"

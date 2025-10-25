@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\PostStatus;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -21,8 +20,6 @@ class HomeController extends Controller
             ->orderBy('published_at', 'DESC')
             ->get();
 
-        $user = Auth::user();
-
-        return view('home', ['posts' => $posts, 'user' => $user]);
+        return view('home', ['posts' => $posts]);
     }
 }

@@ -44,7 +44,7 @@
                             <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
                                 role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
                                 <li>
-                                    <a href="{{ route('posts.edit', ['username' => Auth::user()->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
+                                    <a href="{{ route('posts.edit', ['username' => Auth::user()->username, 'post' => $post->id, 'slug' => $post->slug]) }}"
                                         class="dropdown-item" href="#">Edit</a>
                                 </li>
                                 <li><button type="submit" form="deleteForm_{{ $post->id }}"
@@ -106,7 +106,7 @@
             <a href="{{ $back_url }}" class="btn btn-circle btn-outline size-9">
                 <span class="size-6 icon-[tabler--arrow-left]"></span>
             </a>
-            <a href="{{ route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]) }}"
+            <a href="{{ route('posts.show', ['username' => $post->user->username, 'post' => $post->id, 'slug' => $post->slug]) }}"
                 class="btn btn-outline">Go to post</a>
         </div>
         @php

@@ -9,7 +9,7 @@ document.querySelectorAll(".save-btn").forEach((button) => {
         console.log(saved);
 
         const response = await axios.post(
-            "/api/saves",
+            "/saves",
             JSON.stringify({
                 savable_type: savableType,
                 savable_id: savableId,

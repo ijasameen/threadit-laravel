@@ -7,7 +7,7 @@ document.querySelectorAll(".vote-btn").forEach((button) => {
         const vote = e.target.dataset.vote;
 
         const response = await axios.post(
-            "/api/votes",
+            "/votes",
             JSON.stringify({
                 votable_type: votableType,
                 votable_id: votableId,

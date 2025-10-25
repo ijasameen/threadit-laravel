@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
 use App\PostStatus;
 use App\PostVisibility;
 use DateTime;
@@ -15,15 +14,16 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function show(?string $username, int $id, string $slug): View|RedirectResponse
+    public function show(string $username, Post $post, ?string $slug = null): View|RedirectResponse
     {
-        $post = Post::with('replies.votes')->with('votes')->find($id);
-        $owner = User::find($post->user_id);
+        $post->loadMissing(['user', 'votes', 'replies.votes']);
 
-        if (! $post || ! $owner) {
+        if (! $post) {
             abort(404);
-        } elseif ($post->slug !== $slug || $username !== $owner->username) {
-            return redirect(route('posts.show', ['username' => $owner->username, 'id' => $id, 'slug' => $post->slug]));
+        } elseif ($post->slug !== $slug || $username !== $post->user->username) {
+            return to_route('posts.show',
+                ['username' => $post->user->username, 'post' => $post->id, 'slug' => $post->slug],
+                301);
         }
 
         $replies = $post->replies()
@@ -36,7 +36,6 @@ class PostController extends Controller
 
         return view('post.show', [
             'post' => $post,
-            'user' => Auth::user(),
             'replies' => $replies,
             'back_url' => $back_url,
         ]);
@@ -46,8 +45,8 @@ class PostController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || $user->username !== $username) {
-            return redirect("/u/$user->username/posts/create");
+        if ($user->username !== $username) {
+            return to_route('posts.create', ['username' => $user->username], 301);
         }
 
         $cancel_url = back()->getTargetUrl();
@@ -75,13 +74,12 @@ class PostController extends Controller
         $post = Auth::user()->posts()->create($data);
 
         // TODO: posted message
-        return to_route('home');
+        return to_route('home', 301);
     }
 
-    public function edit(Request $request, string $username, int $id, ?string $slug = null): View|RedirectResponse
+    public function edit(Request $request, string $username, Post $post, ?string $slug = null): View|RedirectResponse
     {
         $user = Auth::user();
-        $post = Post::find($id);
 
         if (! $post) {
             abort(404);
@@ -89,10 +87,14 @@ class PostController extends Controller
             // TODO: redirect to home with a unauthorized message
             abort(403, 'You are not authorized to edit this post.');
         } elseif ($user->username !== $username) {
-            return to_route('posts.edit', ['username' => $user->username, 'id' => $id, 'slug' => $post->slug]);
+            return to_route('posts.edit',
+                ['username' => $user->username, 'post' => $post->id, 'slug' => $post->slug],
+                301);
         } elseif ($post->slug !== $slug) {
             // TODO: Show a message that the title/summary was changed
-            return to_route('posts.edit', ['username' => $username, 'id' => $post->id, 'slug' => $post->slug]);
+            return to_route('posts.edit',
+                ['username' => $username, 'post' => $post->id, 'slug' => $post->slug],
+                301);
         }
 
         $cancel_url = back()->getTargetUrl();
@@ -125,7 +127,9 @@ class PostController extends Controller
         $post->save();
 
         // TODO: edited message
-        return to_route('home');
+        return to_route('posts.show',
+            ['username' => $user->username, 'post' => $post->id, 'slug' => $post->slug],
+            301);
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -143,6 +147,6 @@ class PostController extends Controller
         $post->delete();
 
         // TODO: deleted message
-        return to_route('home');
+        return to_route('home', 301);
     }
 }

@@ -1,3 +1,7 @@
+@php
+    $user = auth()->user();
+@endphp
+
 <x-layout.app>
     @auth
         <div class="w-fit mx-auto">

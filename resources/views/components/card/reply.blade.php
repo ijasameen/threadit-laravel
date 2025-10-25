@@ -1,7 +1,7 @@
 @props(['reply', 'user', 'isLink' => true, 'border' => false])
 
 @php
-    $link = route('replies.show', ['username' => $reply->user->username, 'id' => $reply->id]);
+    $link = route('replies.show', ['username' => $reply->user->username, 'reply' => $reply->id]);
     $dynamic_class = $isLink ? ' hover:border-secondary cursor-pointer' : '';
     $dynamic_class .= $border ? ' border-neutral' : ' border-transparent';
 @endphp
@@ -46,7 +46,7 @@
                     <ul class="border-2 border-base-200 dropdown-menu dropdown-open:opacity-100 hidden min-w-60"
                         role="menu" aria-orientation="vertical" aria-labelledby="dropdown-menu-icon">
                         <li>
-                            <a href="{{ route('replies.edit', ['username' => $user->username, 'id' => $reply->id]) }}"
+                            <a href="{{ route('replies.edit', ['username' => $user->username, 'reply' => $reply->id]) }}"
                                 class="dropdown-item">Edit</a>
                         </li>
                         <li>

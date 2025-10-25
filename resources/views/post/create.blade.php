@@ -13,7 +13,7 @@
         <div>
             <x-form.label for="body">Body</x-form.label>
             <x-form.text-area name="body" id="body" autocomplete='body' placeholder="If you need more words"
-                :value="old('body')" rows=12 />
+                :value="old('body')" rows=12 class="min-h-60" />
             <x-form.error :messages="$errors->get('body')" />
         </div>
         <div class="flex items-center gap-1">

@@ -11,24 +11,24 @@ use Illuminate\View\View;
 
 class ReplyController extends Controller
 {
-    public function show(string $username, int $id): View
+    public function show(string $username, Reply $reply): View
     {
-        $reply = Reply::with('user')->find($id);
+        $reply->loadMissing(['user']);
 
         if (! $reply) {
             abort(404);
         } elseif ($reply->user->username !== $username) {
-            redirect(route('replies.show', ['username' => $reply->user->username]));
+            to_route('replies.show', ['username' => $reply->user->username, 'reply' => $reply->id], 301);
         }
 
         $reply->with('post.user')->with('parentReplyRecursive.user')->with('childRepliesRecursive.user');
 
         if ($reply->parentReply) {
             $parent_reply = $reply->parentReply;
-            $back_url = route('replies.show', ['username' => $parent_reply->user->username, 'id' => $parent_reply->id]);
+            $back_url = route('replies.show', ['username' => $parent_reply->user->username, 'reply' => $parent_reply->id]);
         } else {
             $post = $reply->post;
-            $back_url = route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]);
+            $back_url = route('posts.show', ['username' => $post->user->username, 'post' => $post->id, 'slug' => $post->slug]);
         }
 
         $user = Auth::user();
@@ -60,28 +60,28 @@ class ReplyController extends Controller
         return back()->with('success');
     }
 
-    public function edit(string $username, int $id): View|RedirectResponse
+    public function edit(string $username, Reply $reply): View|RedirectResponse
     {
         $user = Auth::user();
-        $reply = Reply::with('user')->find($id);
+        $reply->loadMissing(['user']);
 
         if (! $reply) {
             abort(404);
-        } elseif ($user->id !== $reply->user->id) {
+        } elseif ($user->id !== $reply->user_id) {
             // TODO: redirect with a unauthorized message
             abort(403, 'You are not authorized to edit this post.');
         } elseif ($reply->user->username !== $username) {
-            redirect(route('replies.show', ['username' => $reply->user->username]));
+            to_route('replies.show', ['username' => $reply->user->username, 'reply' => $reply->id], 301);
         }
 
         $reply->with('post.user')->with('parentReplyRecursive.user')->with('childRepliesRecursive.user');
 
         if ($reply->parentReply) {
             $parent_reply = $reply->parentReply;
-            $back_url = route('replies.show', ['username' => $parent_reply->user->username, 'id' => $parent_reply->id]);
+            $back_url = route('replies.show', ['username' => $parent_reply->user->username, 'reply' => $parent_reply->id]);
         } else {
             $post = $reply->post;
-            $back_url = route('posts.show', ['username' => $post->user->username, 'id' => $post->id, 'slug' => $post->slug]);
+            $back_url = route('posts.show', ['username' => $post->user->username, 'post' => $post->id, 'slug' => $post->slug]);
         }
 
         return view('reply.edit', ['reply' => $reply, 'user' => $user, 'back_url' => $back_url]);
@@ -109,7 +109,7 @@ class ReplyController extends Controller
         $reply->body = $request->body;
         $reply->save();
 
-        return to_route('replies.show', ['username' => $user->username, 'id' => $reply->id]);
+        return to_route('replies.show', ['username' => $user->username, 'reply' => $reply->id], 301);
     }
 
     public function destroy(Request $request): RedirectResponse
